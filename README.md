@@ -1,6 +1,8 @@
 lunchy
 =================
 
+This is a non-compatible fork of [mperham/lunchy](https://github.com/mperham/lunchy).
+
 A friendly wrapper for launchctl.  Start your agents and go to lunch!
 
 Don't you hate OSX's launchctl?  You have to give it exact filenames.  The syntax is annoying different from Linux's nice, simple init system and overly verbose.  It's just not a very developer-friendly tool.
@@ -8,9 +10,11 @@ Don't you hate OSX's launchctl?  You have to give it exact filenames.  The synta
 Lunchy aims to be that friendly tool by wrapping launchctl and providing a few simple operations that you perform all the time:
 
  - ls [pattern]
+ - load [pattern]
+ - unload [pattern]
+ - reload [pattern]
  - start [pattern]
  - stop [pattern]
- - restart [pattern]
  - status [pattern]
  - install [file]
  - show [pattern]
@@ -24,7 +28,7 @@ So instead of:
 
 you can do this:
 
-    lunchy start redis
+    lunchy load redis
 
 and:
 
@@ -41,7 +45,8 @@ The original name was supposed to be launchy.  Lunchy isn't a great name but gem
 Installation
 ---------------
 
-    gem install lunchy
+    gem install specific_install
+    gem specific_install -l https://github.com/nathangrigg/lunchy.git
 
 Lunchy is written in Ruby because I'm a good Ruby developer and a poor Bash developer.  Help welcome.
 
