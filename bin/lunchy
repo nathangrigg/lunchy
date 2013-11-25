@@ -5,7 +5,7 @@ require 'optparse'
 require 'lunchy'
 
 CONFIG = {}
-OPERATIONS = %w(start stop restart ls list status install show edit)
+OPERATIONS = %w(start stop reload ls list status install show edit load unload stat)
 
 option_parser = OptionParser.new do |opts|
   opts.banner = "Lunchy #{Lunchy::VERSION}, the friendly launchctl wrapper\n" \
@@ -33,10 +33,13 @@ Supported commands:
 
  ls [-l] [pattern]       Show the list of installed agents, with optional [pattern] filter
  list [-l] [pattern]     Alias for 'ls'
- start [-wF] [pattern]   Start the first agent matching [pattern]
- stop [-w] [pattern]     Stop the first agent matching [pattern]
- restart [pattern]       Stop and start the first agent matching [pattern]
+ load [-wF] [pattern]    Load the first agent matching [pattern]
+ unload [-w] [pattern]   Unload the first agent matching [pattern]
+ reload [pattern]        Unload then load the first agent matching [pattern]
  status [pattern]        Show the PID and label for all agents, with optional [pattern] filter
+ stat [pattern]          Alias for 'status'
+ start [pattern]         Start the first agent matching [pattern]
+ stop [pattern]          Stop (kill) the first agent matching [pattern]
  install [file]          Install [file] to ~/Library/LaunchAgents or /Library/LaunchAgents (whichever it finds first)
  show [pattern]          Show the contents of the launchctl daemon file
  edit [pattern]          Open the launchctl daemon file in the default editor (EDITOR environment variable)
@@ -47,8 +50,8 @@ Supported commands:
 Example:
  lunchy ls
  lunchy ls -l nginx
- lunchy start -w redis
- lunchy stop mongo
+ lunchy load -w redis
+ lunchy unload mongo
  lunchy status mysql
  lunchy install /usr/local/Cellar/redis/2.2.2/io.redis.redis-server.plist
  lunchy show redis

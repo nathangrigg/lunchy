@@ -3,27 +3,45 @@ require 'fileutils'
 class Lunchy
   VERSION = '0.7.0'
 
-  def start(params)
-    raise ArgumentError, "start [-wF] [name]" if params.empty?
+  def load(params)
+    raise ArgumentError, "load [-wF] [name]" if params.empty?
 
     with_match params[0] do |name, path|
       execute("launchctl load #{force}#{write}#{path.inspect}")
+      puts "loaded #{name}"
+    end
+  end
+
+  def unload(params)
+    raise ArgumentError, "unload [-w] [name]" if params.empty?
+
+    with_match params[0] do |name, path|
+      execute("launchctl unload #{write}#{path.inspect}")
+      puts "unload #{name}"
+    end
+  end
+
+  def reload(params)
+    stop(params.dup)
+    start(params.dup)
+  end
+
+  def start(params)
+    raise ArgumentError, "start [name]" if params.empty?
+
+    with_match params[0] do |name, path|
+      execute("launchctl start #{name}")
       puts "started #{name}"
     end
   end
 
   def stop(params)
-    raise ArgumentError, "stop [-w] [name]" if params.empty?
+    raise ArgumentError, "stop [name]" if params.empty?
 
     with_match params[0] do |name, path|
-      execute("launchctl unload #{write}#{path.inspect}")
+      execute("launchctl stop #{name}")
       puts "stopped #{name}"
     end
-  end
-
-  def restart(params)
-    stop(params.dup)
-    start(params.dup)
   end
 
   def status(params)
@@ -39,6 +57,7 @@ class Lunchy
     cmd << " | grep -i \"#{pattern}\"" if pattern
     execute(cmd)
   end
+  alias_method :stat, :status
 
   def ls(params)
     agents = plists.keys
